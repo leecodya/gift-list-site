@@ -1,0 +1,82 @@
+import React, { useEffect, useState } from 'react'
+import { createGiftItem } from '../appwrite';
+
+function AddGift({ selectedUserID, openAddGiftModal, setOpenAddGiftModal }) {
+    const [dateAdded, setDateAdded] = useState('');
+    const [giftName, setGiftName] = useState('');
+    const [giftURL, setGiftURL] = useState('');
+    // const [isLoading, setIsLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
+    function closeModal() {
+        setOpenAddGiftModal(false)
+    }
+
+    useEffect(() => {
+        const formattedDate = new Date().toLocaleDateString('en-CA', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        });
+
+        setDateAdded(formattedDate)
+    }, [])
+
+    const addGiftItem = async (e) => {
+        e.preventDefault();
+
+        try {
+            // setIsLoading(true)
+            setErrorMessage('')
+
+            const res = await createGiftItem(selectedUserID, giftName, giftURL);
+
+            if (res.$id) {
+                return
+            }
+        } catch (error) {
+            console.log(error);
+            setErrorMessage(`Error adding gift: ${error}`)
+        } finally {
+            // setIsLoading(false)
+            closeModal();
+        }
+    }
+
+    return (
+        <>
+            {openAddGiftModal && (
+                <>
+                    <div className='backdrop' onClick={closeModal}></div>
+                    <dialog open>
+                        <h2 className='text-3xl font-bold'>Add Gift</h2>
+                        <form onSubmit={addGiftItem}>
+                            <p className='mt-2'>
+                                <label htmlFor="gift-name">Gift Name</label>
+                                <input required type="text" id="gift-name" name="gift-name"
+                                    value={giftName}
+                                    onChange={(e) => setGiftName(e.target.value)} />
+                            </p>
+                            <p className='mt-2'>
+                                <label htmlFor="gift-url">Gift URL</label>
+                                <input type="url" id="gift-url" name="gift-url" 
+                                    value={giftURL}
+                                    onChange={(e) => setGiftURL(e.target.value)}/>
+                            </p>
+                            <input type="hidden" id="gift-date-added" name="gift-date-added" value={dateAdded} />
+                            <input type="hidden" id="gift-user-id" name="gift-user-id" value={selectedUserID} />
+
+                            <p className="actions">
+                                <button type="button" onClick={closeModal}>Cancel</button>
+                                <button type="submit">Create</button>
+                            </p>
+                        </form>
+                    </dialog>
+                    {errorMessage && <p>{errorMessage}</p>}
+                </>
+            )}
+        </>
+    )
+}
+
+export default AddGift
