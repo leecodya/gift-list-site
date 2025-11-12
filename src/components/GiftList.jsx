@@ -80,7 +80,7 @@ function GiftList({ selectedUserID, users }) {
                 {selectedUserID
                     &&
                     <header>
-                        <h2 className='text-4xl font-bold'>{getUserNameByID(selectedUserID)}'s Gift List</h2>
+                        <h2 className='text-2xl md:text-4xl font-bold'>{getUserNameByID(selectedUserID)}'s Gift List</h2>
                         <button onClick={() => setOpenAddGiftModal(true)}>Add Gift</button>
                     </header>
                 }

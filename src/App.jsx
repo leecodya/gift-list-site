@@ -4,7 +4,6 @@ import User from './components/User'
 import GiftList from './components/GiftList';
 import { getUsers } from './appwrite';
 import Spinner from './components/Spinner';
-// import { GiftProvider } from './contexts/GiftContext';
 
 function App() {
    const [selectedUserID, setSelectedUserID] = useState();
@@ -29,38 +28,11 @@ function App() {
       getAllUsers()
    }, [])
 
-   // const dummy_users = [
-   //    {
-   //       id: "1",
-   //       name: "Cody"
-   //    },
-   //    {
-   //       id: "2",
-   //       name: "Sammi Jo"
-   //    },
-   //    {
-   //       id: "3",
-   //       name: "Nicole"
-   //    },
-   //    {
-   //       id: "4",
-   //       name: "Sophia"
-   //    },
-   //    {
-   //       id: "5",
-   //       name: "Mike"
-   //    },
-   //    {
-   //       id: "6",
-   //       name: "Mom"
-   //    },
-   // ]
-
    return (
       <>
-         <header className='mb-5'>
-            <img src="./vite.svg" alt="" />
-            <h1 className='mt-3 text-6xl font-bold'>Family Gift Lists</h1>
+         <header className='mb-7 md:mb-9'>
+            <img src="./site-icon.png" className='icon' alt="simple gift icon animation" />
+            <h1 className='mt-3 text-4xl font-bold md:text-6xl'>Family Gift Lists</h1>
          </header>
          <section className='wrapper'>
             <section className='users-section'>

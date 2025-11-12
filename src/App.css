@@ -11,6 +11,11 @@ header {
         position: relative;
         left: 50%;
         transform: translateX(-50%);
+        max-width: 10%;
+
+        @media(max-width: 768px) {
+            max-width: 30%;
+        }
     }
 
     h1 {
@@ -133,9 +138,17 @@ h2 {
         background-color: #bf9ee5;
         border-radius: 6px;
 
-        h2 {
-            margin: 0;
+        .title-area {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            align-items: center;
+            
+            h2 {
+                margin: 0;
+            }
         }
+
     }
 }
 

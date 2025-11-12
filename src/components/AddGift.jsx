@@ -5,6 +5,8 @@ function AddGift({ selectedUserID, openAddGiftModal, setOpenAddGiftModal }) {
     const [dateAdded, setDateAdded] = useState('');
     const [giftName, setGiftName] = useState('');
     const [giftURL, setGiftURL] = useState('');
+    const [giftPrice, setGiftPrice] = useState('');
+    const [giftNotes, setGiftNotes] = useState('');
     // const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -29,7 +31,7 @@ function AddGift({ selectedUserID, openAddGiftModal, setOpenAddGiftModal }) {
             // setIsLoading(true)
             setErrorMessage('')
 
-            const res = await createGiftItem(selectedUserID, giftName, giftURL);
+            const res = await createGiftItem(selectedUserID, giftName, giftURL, Number(giftPrice), giftNotes);
 
             if (res.$id) {
                 return
@@ -49,19 +51,31 @@ function AddGift({ selectedUserID, openAddGiftModal, setOpenAddGiftModal }) {
                 <>
                     <div className='backdrop' onClick={closeModal}></div>
                     <dialog open>
-                        <h2 className='text-3xl font-bold'>Add Gift</h2>
+                        <h2 className='text-3xl font-bold text-white'>Add Gift</h2>
                         <form onSubmit={addGiftItem}>
                             <p className='mt-2'>
-                                <label htmlFor="gift-name">Gift Name</label>
+                                <label htmlFor="gift-name">Gift Name*</label>
                                 <input required type="text" id="gift-name" name="gift-name"
                                     value={giftName}
                                     onChange={(e) => setGiftName(e.target.value)} />
+                            </p>
+                            <p className='mt-2'>
+                                <label htmlFor="gift-price">Gift Price*</label>
+                                <input required type="number" id="gift-price" name="gift-price" 
+                                    value={giftPrice}
+                                    onChange={(e) => setGiftPrice(e.target.value)}/>
                             </p>
                             <p className='mt-2'>
                                 <label htmlFor="gift-url">Gift URL</label>
                                 <input type="url" id="gift-url" name="gift-url" 
                                     value={giftURL}
                                     onChange={(e) => setGiftURL(e.target.value)}/>
+                            </p>
+                            <p className='mt-2'>
+                                <label htmlFor="gift-notes">Gift Notes</label>
+                                <textarea placeholder="i.e. If red isn't available, then do green...or Size: XL" id="gift-notes" name="gift-notes" 
+                                    value={giftNotes}
+                                    onChange={(e) => setGiftNotes(e.target.value)}/>
                             </p>
                             <input type="hidden" id="gift-date-added" name="gift-date-added" value={dateAdded} />
                             <input type="hidden" id="gift-user-id" name="gift-user-id" value={selectedUserID} />
