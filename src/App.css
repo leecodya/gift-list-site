@@ -190,6 +190,9 @@ dialog {
         border: 1px solid #ab9ac0;
         background-color: #d0c2e1;
     }
+    input[type=checkbox] {
+        width: auto;
+    }
     .actions {
         margin: 1rem 0 0;
         display: flex;
