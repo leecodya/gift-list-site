@@ -40,7 +40,12 @@ function App() {
                   {isLoading ? (
                      <Spinner />
                   ) : users.map((user) => (
-                     <User key={user.$id} user={user} setSelectedUserID={setSelectedUserID} />
+                     <User 
+                     key={user.$id} 
+                     user={user} 
+                     value={user.name}
+                     onClick={() => console.log(user.name)}
+                     setSelectedUserID={setSelectedUserID} />
                   ))}
                </ul>
             </section>

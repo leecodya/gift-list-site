@@ -27,49 +27,6 @@ function GiftList({ selectedUserID, users }) {
         getGiftList(selectedUserID);
     }, [selectedUserID, openAddGiftModal])
 
-    /*const dummy_gifts = [
-        {
-            id: 1,
-            userID: "2",
-            title: "Hairspray",
-            url: "https://google.com",
-            date_added: "2025-11-07",
-            has_been_purchased: false
-        },
-        {
-            id: 2,
-            userID: "1",
-            title: "Rugby shirt",
-            url: "https://google.com",
-            date_added: "2025-11-02",
-            has_been_purchased: false
-        },
-        {
-            id: 3,
-            userID: "2",
-            title: "Curtains",
-            url: "https://google.com",
-            date_added: "2025-11-03",
-            has_been_purchased: false
-        },
-        {
-            id: 4,
-            userID: "3",
-            title: "Dog shampoo",
-            url: "https://google.com",
-            date_added: "2025-11-04",
-            has_been_purchased: false
-        },
-        {
-            id: 5,
-            userID: "1",
-            title: "Water filter",
-            url: "https://google.com",
-            date_added: "2025-11-05",
-            has_been_purchased: false
-        },
-    ]*/
-
     function getUserNameByID(id) {
         return users.filter(user => user.$id == id)[0].name
     }
