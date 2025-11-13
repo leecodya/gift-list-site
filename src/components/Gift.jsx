@@ -60,9 +60,10 @@ function Gift({ gift }) {
 
             {hasBeenPurchased
                 ? ''
-                : <p className='actions mt-4'>
-                    <button onClick={() => setHasBeenPurchased(true)} className='text-white'>Purchased</button>
-                </p>}
+                : <div className='actions mt-4'>
+                    <p className='text-lg font-bold'>Have you bought this gift?</p>
+                    <button onClick={() => setHasBeenPurchased(true)} className='text-white mt-2'>Yes</button>
+                </div>}
         </li>
     )
 }
