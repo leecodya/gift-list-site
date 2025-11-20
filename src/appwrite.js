@@ -43,7 +43,9 @@ export const getUsers = async () => {
 
 export const getGiftsByUser = async (userID) => {
     try {
-        const result = await database.listDocuments(DATABASE_ID, GIFTS_ID);
+        const result = await database.listDocuments(DATABASE_ID, GIFTS_ID, [
+            Query.orderDesc("$createdAt")
+        ]);
 
         return result.documents.filter((gift) => gift.user_id == userID);
     } catch (error) {
