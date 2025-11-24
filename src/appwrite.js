@@ -21,7 +21,7 @@ export const createGiftItem = async (userID, title, url, price, notes) => {
                 gift_url: url,
                 user_id: userID,
                 price,
-                notes
+                notes,
             }
         );
 
@@ -44,10 +44,10 @@ export const getUsers = async () => {
 export const getGiftsByUser = async (userID) => {
     try {
         const result = await database.listDocuments(DATABASE_ID, GIFTS_ID, [
-            Query.orderDesc("$createdAt")
+            Query.orderDesc("price"),
         ]);
 
-        return result.documents.filter((gift) => gift.user_id == userID);
+        return result.documents.filter((gift) => gift.user_id === userID);
     } catch (error) {
         console.log(error);
     }
@@ -75,7 +75,7 @@ export const hasThisGiftBeenPurchased = async (giftID) => {
     try {
         const result = await database.listDocuments(DATABASE_ID, GIFTS_ID, [
             Query.equal("$id", giftID),
-            Query.equal("has_been_purchased", true)
+            Query.equal("has_been_purchased", true),
         ]);
 
         if (result.documents.length > 0) {

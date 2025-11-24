@@ -3,12 +3,30 @@ import { useState } from 'react';
 import Gift from './Gift'
 import AddGift from './AddGift';
 import Spinner from './Spinner';
-import { getGiftsByUser } from '../appwrite';
+import { getGiftsByUser, getUsers } from '../appwrite';
 
-function GiftList({ selectedUserID, users }) {
+function GiftList({ selectedUserID }) {
     const [openAddGiftModal, setOpenAddGiftModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [giftList, setGiftList] = useState([])
+    const [users, setUsers] = useState([])
+
+    const getAllUsers = async () => {
+        setIsLoading(true)
+        try {
+            const allUsers = await getUsers();
+
+            setUsers(allUsers)
+        } catch (error) {
+            console.log(`Error getting users: ${error}`)
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        getAllUsers()
+    }, [])
 
     const getGiftList = async (selectedUserID) => {
         setIsLoading(true)
@@ -27,8 +45,9 @@ function GiftList({ selectedUserID, users }) {
         getGiftList(selectedUserID);
     }, [selectedUserID, openAddGiftModal])
 
-    function getUserNameByID(id) {
-        return users.filter(user => user.$id == id)[0].name
+    function getUserNameByID(selectedUserID) {
+        const user = users.find((user) => user.$id === selectedUserID);
+        return user ? user.name : '';
     }
 
     return (
@@ -45,10 +64,10 @@ function GiftList({ selectedUserID, users }) {
                     <Spinner />
                 ) : selectedUserID
                     ? <ul className='gift-list'>
-                        {giftList.length > 0 
-                        ? (giftList.map((updated_gift) => (
-                            <Gift key={updated_gift.$id} gift={updated_gift} />
-                        ))) : <p>No gifts have been added for {getUserNameByID(selectedUserID)}</p>}
+                        {giftList.length > 0
+                            ? (giftList.map((updated_gift) => (
+                                <Gift key={updated_gift.$id} gift={updated_gift} />
+                            ))) : <p>No gifts have been added for {getUserNameByID(selectedUserID)}</p>}
                     </ul>
                     : <p className='no-selected-user'>No user has been selected yet.</p>
                 }

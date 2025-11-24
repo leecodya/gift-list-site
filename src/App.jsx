@@ -1,32 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import './App.css'
-import User from './components/User'
 import GiftList from './components/GiftList';
-import { getUsers } from './appwrite';
-import Spinner from './components/Spinner';
+import UsersList from './components/UsersList';
 
 function App() {
    const [selectedUserID, setSelectedUserID] = useState();
    // const [giftList, setGiftList] = useState([])
-   const [isLoading, setIsLoading] = useState(false);
-   const [users, setUsers] = useState([])
-
-   const getAllUsers = async () => {
-      setIsLoading(true)
-      try {
-         const allUsers = await getUsers();
-
-         setUsers(allUsers)
-      } catch (error) {
-         console.log(`Error getting users: ${error}`)
-      } finally {
-         setIsLoading(false)
-      }
-   }
-
-   useEffect(() => {
-      getAllUsers()
-   }, [])
 
    return (
       <>
@@ -35,22 +14,9 @@ function App() {
             <h1 className='mt-3 text-4xl font-bold md:text-6xl'>Family Gift Lists</h1>
          </header>
          <section className='wrapper'>
-            <section className='users-section'>
-               <ul className='users-list'>
-                  {isLoading ? (
-                     <Spinner />
-                  ) : users.map((user) => (
-                     <User 
-                     key={user.$id} 
-                     user={user} 
-                     value={user.name}
-                     onClick={() => console.log(user.name)}
-                     setSelectedUserID={setSelectedUserID} />
-                  ))}
-               </ul>
-            </section>
+            <UsersList setSelectedUserID={setSelectedUserID} />
 
-            <GiftList selectedUserID={selectedUserID} users={users} />
+            <GiftList selectedUserID={selectedUserID} />
          </section>
       </>
    )
