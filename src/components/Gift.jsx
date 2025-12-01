@@ -49,7 +49,7 @@ function Gift({ gift }) {
                 <span className='text-2xl'>${gift.price}</span>
             </div>
 
-            {gift.gift_url && <a href={gift.gift_url} className="block mt-1" target='_blank'>{gift.gift_url}</a>}
+            {gift.gift_url && <a href={gift.gift_url} className="block mt-1" target='_blank'>Click here for the specific gift page</a>}
 
             {gift.notes && (
                 <>
