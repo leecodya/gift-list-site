@@ -57,17 +57,9 @@ export const getGiftsByUser = async (userID) => {
 
 export const updatePurchasedGift = async (giftID) => {
     try {
-        const result = await database.listDocuments(DATABASE_ID, GIFTS_ID, [
-            Query.equal("$id", giftID),
-        ]);
-
-        if (result.documents.length > 0) {
-            const doc = result.documents[0];
-
-            await database.updateDocument(DATABASE_ID, GIFTS_ID, doc.$id, {
-                has_been_purchased: true,
-            });
-        }
+        await database.updateDocument(DATABASE_ID, GIFTS_ID, giftID, {
+            has_been_purchased: true,
+        });
     } catch (error) {
         console.log(error);
     }
