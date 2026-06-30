@@ -1,80 +1,74 @@
-import React, { useEffect } from 'react'
-import { useState } from 'react';
-import Gift from './Gift'
+import { useEffect, useState } from 'react';
+import Gift from './Gift';
 import AddGift from './AddGift';
 import Spinner from './Spinner';
-import { getGiftsByUser, getUsers } from '../appwrite';
+import { getGiftsByUser } from '../appwrite';
 
-function GiftList({ selectedUserID }) {
+function GiftList({ selectedUser }) {
     const [openAddGiftModal, setOpenAddGiftModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [giftList, setGiftList] = useState([])
-    const [users, setUsers] = useState([])
-
-    const getAllUsers = async () => {
-        setIsLoading(true)
-        try {
-            const allUsers = await getUsers();
-
-            setUsers(allUsers)
-        } catch (error) {
-            console.log(`Error getting users: ${error}`)
-        } finally {
-            setIsLoading(false)
-        }
-    }
+    const [giftList, setGiftList] = useState([]);
 
     useEffect(() => {
-        getAllUsers()
-    }, [])
+        if (!selectedUser?.$id) return;
 
-    const getGiftList = async (selectedUserID) => {
-        setIsLoading(true)
-        try {
-            const gifts = await getGiftsByUser(selectedUserID);
+        const getGiftList = async () => {
+            setIsLoading(true);
 
-            setGiftList(gifts)
-        } catch (error) {
-            console.log(`Error getting gifts by user: ${error}`)
-        } finally {
-            setIsLoading(false)
-        }
-    }
+            try {
+                const gifts = await getGiftsByUser(selectedUser.$id);
+                setGiftList(gifts);
+            } catch (error) {
+                console.log(`Error getting gifts by user: ${error}`);
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
-    useEffect(() => {
-        getGiftList(selectedUserID);
-    }, [selectedUserID, openAddGiftModal])
-
-    function getUserNameByID(selectedUserID) {
-        const user = users.find((user) => user.$id === selectedUserID);
-        return user ? user.name : '';
-    }
+        getGiftList();
+    }, [selectedUser?.$id, openAddGiftModal]);
 
     return (
         <>
-            <section className='gift-list-section'>
-                {selectedUserID
-                    &&
-                    <header>
-                        <h2 className='text-2xl md:text-4xl font-bold'>{getUserNameByID(selectedUserID)}'s Gift List</h2>
-                        <button onClick={() => setOpenAddGiftModal(true)}>Add Gift</button>
-                    </header>
-                }
-                {isLoading ? (
-                    <Spinner />
-                ) : selectedUserID
-                    ? <ul className='gift-list'>
-                        {giftList.length > 0
-                            ? (giftList.map((updated_gift) => (
-                                <Gift key={updated_gift.$id} gift={updated_gift} />
-                            ))) : <p>No gifts have been added for {getUserNameByID(selectedUserID)}</p>}
-                    </ul>
-                    : <p className='no-selected-user'>No user has been selected yet.</p>
-                }
+            <section className="gift-list-section">
+                {selectedUser?.$id ? (
+                    <>
+                        <header>
+                            <h2 className="text-2xl md:text-4xl font-bold">
+                                {selectedUser.name}'s Gift List
+                            </h2>
+
+                            <button onClick={() => setOpenAddGiftModal(true)}>
+                                Add Gift
+                            </button>
+                        </header>
+
+                        {isLoading ? (
+                            <Spinner />
+                        ) : giftList.length > 0 ? (
+                            <ul className="gift-list">
+                                {giftList.map((gift) => (
+                                    <Gift key={gift.$id} gift={gift} />
+                                ))}
+                            </ul>
+                        ) : (
+                            <p>No gifts have been added for {selectedUser.name}.</p>
+                        )}
+                    </>
+                ) : (
+                    <p className="no-selected-user">No user has been selected yet.</p>
+                )}
             </section>
-            {openAddGiftModal && <AddGift selectedUserID={selectedUserID} openAddGiftModal={openAddGiftModal} setOpenAddGiftModal={setOpenAddGiftModal} />}
+
+            {openAddGiftModal && (
+                <AddGift
+                    selectedUserID={selectedUser.$id}
+                    openAddGiftModal={openAddGiftModal}
+                    setOpenAddGiftModal={setOpenAddGiftModal}
+                />
+            )}
         </>
-    )
+    );
 }
 
-export default GiftList
+export default GiftList;

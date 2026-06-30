@@ -1,46 +1,29 @@
-import React from 'react'
-import { getUsers } from '../appwrite';
-import Spinner from './Spinner';
-import User from './User';
-import { useEffect, useState } from 'react'
+import User from "./User";
 
-function UsersList({ setSelectedUserID }) {
-    const [isLoading, setIsLoading] = useState(false);
-    const [users, setUsers] = useState([])
-
-    const getAllUsers = async () => {
-        setIsLoading(true)
-        try {
-            const allUsers = await getUsers();
-
-            setUsers(allUsers)
-        } catch (error) {
-            console.log(`Error getting users: ${error}`)
-        } finally {
-            setIsLoading(false)
-        }
+function UsersList({ users, isLoading, setSelectedUser }) {
+    if (isLoading) {
+        return <p>Loading users...</p>;
     }
 
-    useEffect(() => {
-        getAllUsers()
-    }, [])
-
     return (
-        <section className='users-section'>
-            <ul className='users-list'>
-                {isLoading ? (
-                    <Spinner />
-                ) : users.map((user) => (
-                    <User
-                        key={user.$id}
-                        user={user}
-                        value={user.name}
-                        onClick={() => console.log(user.name)}
-                        setSelectedUserID={setSelectedUserID} />
-                ))}
-            </ul>
+        <section className="users-list">
+            <h2 className="text-3xl font-bold mb-4">Family Members</h2>
+
+            {users.length === 0 ? (
+                <p>No family members found.</p>
+            ) : (
+                <ul>
+                    {users.map((user) => (
+                        <User
+                            key={user.$id}
+                            user={user}
+                            setSelectedUser={setSelectedUser}
+                        />
+                    ))}
+                </ul>
+            )}
         </section>
-    )
+    );
 }
 
-export default UsersList
+export default UsersList;

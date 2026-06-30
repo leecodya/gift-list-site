@@ -1,14 +1,11 @@
-import React from 'react'
-
-function User({ user, setSelectedUserID }) {
-
-    return (
-        <li>
-            <button type="button" onClick={() => setSelectedUserID(user.$id)}>
-                {user.name}
-            </button>
-        </li>
-    )
+function User({ user, setSelectedUser }) {
+  return (
+    <li className="mb-2">
+      <button onClick={() => setSelectedUser(user)}>
+        {user.name}
+      </button>
+    </li>
+  );
 }
 
-export default User
+export default User;
