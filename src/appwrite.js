@@ -22,7 +22,7 @@ export const createGiftItem = async (userID, title, url, price, notes) => {
                 user_id: userID,
                 price,
                 notes,
-            }
+            },
         );
 
         return response;
@@ -44,12 +44,14 @@ export const getUsers = async () => {
 export const getGiftsByUser = async (userID) => {
     try {
         const result = await database.listDocuments(DATABASE_ID, GIFTS_ID, [
+            Query.equal("user_id", userID),
             Query.orderDesc("price"),
         ]);
 
-        return result.documents.filter((gift) => gift.user_id === userID);
+        return result.documents;
     } catch (error) {
         console.log(error);
+        return [];
     }
 };
 
