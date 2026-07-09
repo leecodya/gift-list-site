@@ -81,3 +81,20 @@ export const hasThisGiftBeenPurchased = async (giftID) => {
         console.log(error);
     }
 };
+
+export const checkUserAccessCode = async (userID, accessCode) => {
+    try {
+        const result = await database.listDocuments(DATABASE_ID, USERS_ID, [
+            Query.equal("$id", userID),
+            Query.equal("access_code", accessCode)
+        ]);
+
+        if (result.documents.length > 0) {
+            return result.documents[0];
+        } else {
+            return false;
+        }
+    } catch (error) {
+        console.log(error)
+    } 
+}

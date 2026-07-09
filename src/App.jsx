@@ -3,9 +3,11 @@ import './App.css';
 import GiftList from './components/GiftList';
 import UsersList from './components/UsersList';
 import { getUsers } from './appwrite';
+import Login from './components/Login';
 
 function App() {
    const [selectedUser, setSelectedUser] = useState(null);
+   const [loggedInUser, setLoggedInUser] = useState(null);
    const [isLoading, setIsLoading] = useState(false);
    const [users, setUsers] = useState([]);
 
@@ -34,13 +36,21 @@ function App() {
          </header>
 
          <section className="wrapper">
-            <UsersList
+            <Login
+               users={users}
+               isLoading={isLoading}
+               setSelectedUser={setSelectedUser}
+               setLoggedInUser={setLoggedInUser}
+               selectedUser={selectedUser}
+            />
+            <GiftList selectedUser={loggedInUser} />
+            {/* <UsersList
                users={users}
                isLoading={isLoading}
                setSelectedUser={setSelectedUser}
             />
 
-            <GiftList selectedUser={selectedUser} />
+            <GiftList selectedUser={selectedUser} /> */}
          </section>
       </>
    );
