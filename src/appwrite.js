@@ -55,10 +55,12 @@ export const getGiftsByUser = async (userID) => {
     }
 };
 
-export const updatePurchasedGift = async (giftID) => {
+export const updatePurchasedGift = async (giftID, currentUserId, currentUserName) => {
     try {
         await database.updateDocument(DATABASE_ID, GIFTS_ID, giftID, {
             has_been_purchased: true,
+            purchased_by_user_id: currentUserId,
+            purchased_by_name: currentUserName,
         });
     } catch (error) {
         console.log(error);

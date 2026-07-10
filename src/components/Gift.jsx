@@ -4,9 +4,9 @@ import { updatePurchasedGift } from '../appwrite';
 function Gift({ gift, currentUser }) {
     const [hasBeenPurchased, setHasBeenPurchased] = useState(gift.has_been_purchased);
 
-    const handlePurchase = async () => {
+    const handlePurchase = async (currentUserId, currentUserName) => {
         try {
-            await updatePurchasedGift(gift.$id);
+            await updatePurchasedGift(gift.$id, currentUserId, currentUserName);
             setHasBeenPurchased(true);
         } catch (error) {
             console.log(error);
@@ -44,11 +44,17 @@ function Gift({ gift, currentUser }) {
                     <p className="notes">{gift.notes}</p>
                 </>
             )}
+             
+            {gift.purchased_by_user_id && currentUser.$id !== gift.user_id && (
+                <>
+                    Purchased by: <strong>{gift.purchased_by_name}</strong>
+                </>
+            )}
 
             {!hasBeenPurchased && currentUser.$id !== gift.user_id && (
                 <div className="actions mt-4">
                     <p className="text-lg font-bold">Have you bought this gift?</p>
-                    <button onClick={handlePurchase} className="text-white mt-2">
+                    <button onClick={() => handlePurchase(currentUser.$id, currentUser.name)} className="text-white mt-2">
                         Yes
                     </button>
                 </div>
