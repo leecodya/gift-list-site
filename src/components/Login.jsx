@@ -1,63 +1,84 @@
-import React, { useState } from 'react';
-import { checkUserAccessCode } from '../appwrite';
-import UsersList from './UsersList';
-import User from './User';
+import { useState } from "react";
+import { checkUserAccessCode } from "../appwrite";
 
-function Login({ users, isLoading, setSelectedUser, setLoggedInUser, selectedUser }) {
-    // const [userToBeSignedIn, setUserToBeSignedIn] = useState(selectedUser);
-    const [accessCode, setAccessCode] = useState('');
+function Login({ users, setCurrentUser }) {
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [accessCode, setAccessCode] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     const handleSignIn = async (e) => {
         e.preventDefault();
 
         if (!selectedUser) {
-            console.log('Please select a user first.');
+            setErrorMessage("Please select your name.");
             return;
         }
 
         try {
-            let result = await checkUserAccessCode(selectedUser.$id, accessCode);
-            setLoggedInUser(result)
+            const valid = await checkUserAccessCode(
+                selectedUser.$id,
+                accessCode
+            );
+
+            if (valid) {
+                setCurrentUser(selectedUser);
+            } else {
+                setErrorMessage(
+                    "Incorrect access code. Please verify your name and try again."
+                );
+            }
         } catch (error) {
             console.log(error);
         }
     };
+
     return (
         <section className="login">
             <div className="container">
-                {users.length === 0 ? (
-                    <p>No family members found.</p>
-                ) : (
-                    <ul>
-                        {users.map((user) => (
-                            <User
-                                key={user.$id}
-                                user={user}
-                                setSelectedUser={setSelectedUser}
-                            />
-                        ))}
-                    </ul>
+                <h2>Who are you?</h2>
+
+                <select>
+                    {users.map((user) => (
+                        <option key={user.$id} onClick={() => setSelectedUser(user)}>
+                            {user.name}
+                        </option>
+                    ))}
+                </select>
+
+                {selectedUser && (
+                    <p>
+                        Selected: <strong>{selectedUser.name}</strong>
+                    </p>
                 )}
+
                 <form onSubmit={handleSignIn}>
                     <p className="mt-2">
-                        <label htmlFor="access-code">Access Code*</label>
+                        <label htmlFor="access-code">
+                            Access Code
+                        </label>
+
                         <input
                             required
-                            type="text"
+                            type="password"
                             id="access-code"
-                            name="access-code"
                             value={accessCode}
-                            style={{ border: '1px solid white', borderRadius: '5px', marginLeft: '10px' }}
-                            onChange={(e) => setAccessCode(e.target.value)}
+                            onChange={(e) =>
+                                setAccessCode(e.target.value)
+                            }
                         />
                     </p>
-                    <p className="actions">
-                        <button type="submit">Sign In</button>
-                    </p>
+
+                    {errorMessage && (
+                        <p>{errorMessage}</p>
+                    )}
+
+                    <button type="submit">
+                        Continue
+                    </button>
                 </form>
             </div>
         </section>
-    )
+    );
 }
 
-export default Login
+export default Login;

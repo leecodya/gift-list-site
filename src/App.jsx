@@ -4,10 +4,11 @@ import GiftList from './components/GiftList';
 import UsersList from './components/UsersList';
 import { getUsers } from './appwrite';
 import Login from './components/Login';
+import Header from './components/Header';
 
 function App() {
    const [selectedUser, setSelectedUser] = useState(null);
-   const [loggedInUser, setLoggedInUser] = useState(null);
+   const [currentUser, setCurrentUser] = useState(null);
    const [isLoading, setIsLoading] = useState(false);
    const [users, setUsers] = useState([]);
 
@@ -30,28 +31,29 @@ function App() {
 
    return (
       <>
-         <header className="mb-7 md:mb-9">
-            <img src="./site-icon.png" className="icon" alt="simple gift icon animation" />
-            <h1 className="mt-3 text-4xl font-bold md:text-6xl">Family Gift Lists</h1>
-         </header>
+         <Header currentUser={currentUser} />
 
-         <section className="wrapper">
-            <Login
-               users={users}
-               isLoading={isLoading}
-               setSelectedUser={setSelectedUser}
-               setLoggedInUser={setLoggedInUser}
-               selectedUser={selectedUser}
-            />
-            <GiftList selectedUser={loggedInUser} />
-            {/* <UsersList
-               users={users}
-               isLoading={isLoading}
-               setSelectedUser={setSelectedUser}
-            />
+         {!currentUser ? (
+            <>
+               <Login
+                  users={users}
+                  setCurrentUser={setCurrentUser}
+               />
+            </>
+         ) : (
+            <section className='wrapper'>
+               <UsersList
+                  users={users}
+                  isLoading={isLoading}
+                  setSelectedUser={setSelectedUser}
+               />
 
-            <GiftList selectedUser={selectedUser} /> */}
-         </section>
+               <GiftList
+                  currentUser={currentUser}
+                  selectedUser={selectedUser}
+               />
+            </section>
+         )}
       </>
    );
 }

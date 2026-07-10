@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { updatePurchasedGift } from '../appwrite';
 
-function Gift({ gift }) {
+function Gift({ gift, currentUser }) {
     const [hasBeenPurchased, setHasBeenPurchased] = useState(gift.has_been_purchased);
 
     const handlePurchase = async () => {
@@ -21,6 +21,10 @@ function Gift({ gift }) {
                 </h3>
 
                 <span className="text-2xl">${gift.price}</span>
+
+                {currentUser.$id === gift.user_id && (
+                    <button type="button">Edit</button>
+                )}
             </div>
 
             {gift.gift_url && (
@@ -41,7 +45,7 @@ function Gift({ gift }) {
                 </>
             )}
 
-            {!hasBeenPurchased && (
+            {!hasBeenPurchased && currentUser.$id !== gift.user_id && (
                 <div className="actions mt-4">
                     <p className="text-lg font-bold">Have you bought this gift?</p>
                     <button onClick={handlePurchase} className="text-white mt-2">

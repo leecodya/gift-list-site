@@ -4,7 +4,7 @@ import AddGift from './AddGift';
 import Spinner from './Spinner';
 import { getGiftsByUser } from '../appwrite';
 
-function GiftList({ selectedUser }) {
+function GiftList({ currentUser, selectedUser}) {
     const [openAddGiftModal, setOpenAddGiftModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [giftList, setGiftList] = useState([]);
@@ -48,7 +48,7 @@ function GiftList({ selectedUser }) {
                         ) : giftList.length > 0 ? (
                             <ul className="gift-list">
                                 {giftList.map((gift) => (
-                                    <Gift key={gift.$id} gift={gift} />
+                                    <Gift key={gift.$id} gift={gift} currentUser={currentUser} />
                                 ))}
                             </ul>
                         ) : (
