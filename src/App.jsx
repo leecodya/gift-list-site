@@ -31,7 +31,7 @@ function App() {
 
    return (
       <>
-         <Header currentUser={currentUser} />
+         <Header currentUser={currentUser} setCurrentUser={setCurrentUser} />
 
          {!currentUser ? (
             <>
