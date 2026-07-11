@@ -31,6 +31,19 @@ export const createGiftItem = async (userID, title, url, price, notes) => {
     }
 };
 
+export const updateGiftItem = async (giftID, updatedGift) => {
+    try {
+        return await database.updateDocument(
+            DATABASE_ID,
+            GIFTS_ID,
+            giftID,
+            updatedGift
+        );
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const getUsers = async () => {
     try {
         const result = await database.listDocuments(DATABASE_ID, USERS_ID);

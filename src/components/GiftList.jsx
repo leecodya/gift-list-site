@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Gift from './Gift';
 import AddGift from './AddGift';
+import EditGift from './EditGift';
 import Spinner from './Spinner';
 import { getGiftsByUser } from '../appwrite';
 
