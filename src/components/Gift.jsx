@@ -3,18 +3,17 @@ import { updatePurchasedGift } from '../appwrite';
 import EditGift from './EditGift';
 
 function Gift({ gift, currentUser, onGiftUpdated }) {
-    const [hasBeenPurchased, setHasBeenPurchased] = useState(gift.has_been_purchased);
     const [openEditGiftModal, setOpenEditGiftModal] = useState(false);
 
-    const handlePurchase = async (currentUserId, currentUserName) => {
+    const handlePurchase = async () => {
         try {
-            await updatePurchasedGift(
+            const updatedGift = await updatePurchasedGift(
                 gift.$id,
-                currentUserId,
-                currentUserName
+                currentUser.$id,
+                currentUser.name
             );
 
-            setHasBeenPurchased(true);
+            onGiftUpdated(updatedGift)
         } catch (error) {
             console.log(error);
         }
@@ -25,12 +24,12 @@ function Gift({ gift, currentUser, onGiftUpdated }) {
             <li className="gift">
                 <div className="title-area">
                     <h3 className="text-2xl md:text-3xl font-bold">
-                        {hasBeenPurchased ? <s>{gift.title}</s> : gift.title}
+                        {gift.has_been_purchased ? <s>{gift.title}</s> : gift.title}
                     </h3>
 
                     <span className="text-2xl">${gift.price}</span>
 
-                    {currentUser.$id === gift.user_id && !hasBeenPurchased && (
+                    {currentUser.$id === gift.user_id && !gift.has_been_purchased && (
                         <button
                             type="button"
                             onClick={() => setOpenEditGiftModal(true)}
@@ -66,7 +65,7 @@ function Gift({ gift, currentUser, onGiftUpdated }) {
                         </p>
                     )}
 
-                {!hasBeenPurchased &&
+                {!gift.has_been_purchased &&
                     currentUser.$id !== gift.user_id && (
                         <div className="actions mt-4">
                             <p className="text-lg font-bold">
@@ -74,12 +73,7 @@ function Gift({ gift, currentUser, onGiftUpdated }) {
                             </p>
 
                             <button
-                                onClick={() =>
-                                    handlePurchase(
-                                        currentUser.$id,
-                                        currentUser.name
-                                    )
-                                }
+                                onClick={handlePurchase}
                                 className="text-white mt-2"
                             >
                                 Yes
@@ -88,7 +82,7 @@ function Gift({ gift, currentUser, onGiftUpdated }) {
                     )}
             </li>
 
-            {openEditGiftModal && !hasBeenPurchased && (
+            {openEditGiftModal && !gift.has_been_purchased && (
                 <EditGift
                     gift={gift}
                     openEditGiftModal={openEditGiftModal}
