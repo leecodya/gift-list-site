@@ -4,7 +4,8 @@ import { updateGiftItem } from '../appwrite';
 function EditGift({
     gift,
     openEditGiftModal,
-    setOpenEditGiftModal
+    setOpenEditGiftModal,
+    onGiftUpdated
 }) {
     const [giftName, setGiftName] = useState(gift.title);
     const [giftURL, setGiftURL] = useState(gift.gift_url || '');
@@ -33,6 +34,7 @@ function EditGift({
             const response = await updateGiftItem(gift.$id, updatedGift);
 
             if (response?.$id) {
+                onGiftUpdated(response);
                 closeModal();
             }
         } catch (error) {

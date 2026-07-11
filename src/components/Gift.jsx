@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { updatePurchasedGift } from '../appwrite';
 import EditGift from './EditGift';
 
-function Gift({ gift, currentUser }) {
+function Gift({ gift, currentUser, onGiftUpdated }) {
     const [hasBeenPurchased, setHasBeenPurchased] = useState(gift.has_been_purchased);
     const [openEditGiftModal, setOpenEditGiftModal] = useState(false);
 
@@ -93,6 +93,7 @@ function Gift({ gift, currentUser }) {
                     gift={gift}
                     openEditGiftModal={openEditGiftModal}
                     setOpenEditGiftModal={setOpenEditGiftModal}
+                    onGiftUpdated={onGiftUpdated}
                 />
             )}
         </>

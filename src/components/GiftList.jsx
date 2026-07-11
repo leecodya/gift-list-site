@@ -10,6 +10,14 @@ function GiftList({ currentUser, selectedUser }) {
     const [isLoading, setIsLoading] = useState(false);
     const [giftList, setGiftList] = useState([]);
 
+    const handleGiftUpdated = (updatedGift) => {
+        setGiftList((currentGifts) =>
+            currentGifts.map((gift) =>
+                gift.$id === updatedGift.$id ? updatedGift : gift
+            )
+        );
+    };
+
     useEffect(() => {
         if (!selectedUser?.$id) return;
 
@@ -51,7 +59,12 @@ function GiftList({ currentUser, selectedUser }) {
                         ) : giftList.length > 0 ? (
                             <ul className="gift-list">
                                 {giftList.map((gift) => (
-                                    <Gift key={gift.$id} gift={gift} currentUser={currentUser} />
+                                    <Gift
+                                        key={gift.$id}
+                                        gift={gift}
+                                        currentUser={currentUser}
+                                        onGiftUpdated={handleGiftUpdated}
+                                    />
                                 ))}
                             </ul>
                         ) : (
