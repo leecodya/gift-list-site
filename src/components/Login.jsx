@@ -72,8 +72,8 @@ function Login({ users, setCurrentUser }) {
                         <p>{errorMessage}</p>
                     )}
 
-                    <button type="submit">
-                        Continue
+                    <button className="mt-2.5" type="submit">
+                        Sign In
                     </button>
                 </form>
             </div>

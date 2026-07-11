@@ -4,7 +4,7 @@ import AddGift from './AddGift';
 import Spinner from './Spinner';
 import { getGiftsByUser } from '../appwrite';
 
-function GiftList({ currentUser, selectedUser}) {
+function GiftList({ currentUser, selectedUser }) {
     const [openAddGiftModal, setOpenAddGiftModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [giftList, setGiftList] = useState([]);
@@ -38,9 +38,11 @@ function GiftList({ currentUser, selectedUser}) {
                                 {selectedUser.name}'s Gift List
                             </h2>
 
-                            <button onClick={() => setOpenAddGiftModal(true)}>
-                                Add Gift
-                            </button>
+                            {currentUser.$id === selectedUser.$id && (
+                                <button onClick={() => setOpenAddGiftModal(true)}>
+                                    Add Gift
+                                </button>
+                            )}
                         </header>
 
                         {isLoading ? (
