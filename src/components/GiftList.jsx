@@ -18,6 +18,18 @@ function GiftList({ currentUser, selectedUser }) {
         );
     };
 
+    // Creates two lists and sorts each by created date
+    const sortByCreatedDate = (a, b) =>
+        new Date(a.$createdAt) - new Date(b.$createdAt);
+
+    const availableGifts = giftList
+        .filter((gift) => !gift.has_been_purchased)
+        .sort(sortByCreatedDate);
+
+    const purchasedGifts = giftList
+        .filter((gift) => gift.has_been_purchased)
+        .sort(sortByCreatedDate);
+
     useEffect(() => {
         if (!selectedUser?.$id) return;
 
@@ -54,22 +66,44 @@ function GiftList({ currentUser, selectedUser }) {
                             )}
                         </header>
 
-                        {isLoading ? (
-                            <Spinner />
-                        ) : giftList.length > 0 ? (
-                            <ul className="gift-list">
-                                {giftList.map((gift) => (
-                                    <Gift
-                                        key={gift.$id}
-                                        gift={gift}
-                                        currentUser={currentUser}
-                                        onGiftUpdated={handleGiftUpdated}
-                                    />
-                                ))}
-                            </ul>
-                        ) : (
-                            <p>No gifts have been added for {selectedUser.name}.</p>
-                        )}
+                        <section>
+                            <h3 className="text-xl mb-3.5 md:text-3xl font-bold">Available Gifts</h3>
+                            {isLoading ? (
+                                <Spinner />
+                            ) : availableGifts.length > 0 ? (
+                                <ul className="gift-list">
+                                    {availableGifts.map((gift) => (
+                                        <Gift
+                                            key={gift.$id}
+                                            gift={gift}
+                                            currentUser={currentUser}
+                                            onGiftUpdated={handleGiftUpdated}
+                                        />
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>No available gifts.</p>
+                            )}
+                        </section>
+                        <section>
+                            <h3 className="text-xl mb-3.5 mt-7 md:text-3xl font-bold">Purchased Gifts</h3>
+                            {isLoading ? (
+                                <Spinner />
+                            ) : purchasedGifts.length > 0 ? (
+                                <ul className="gift-list">
+                                    {purchasedGifts.map((gift) => (
+                                        <Gift
+                                            key={gift.$id}
+                                            gift={gift}
+                                            currentUser={currentUser}
+                                            onGiftUpdated={handleGiftUpdated}
+                                        />
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>No purchased gifts.</p>
+                            )}
+                        </section>
                     </>
                 ) : (
                     <p className="no-selected-user">No user has been selected yet.</p>

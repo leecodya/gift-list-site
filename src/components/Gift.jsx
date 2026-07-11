@@ -30,7 +30,7 @@ function Gift({ gift, currentUser, onGiftUpdated }) {
 
                     <span className="text-2xl">${gift.price}</span>
 
-                    {currentUser.$id === gift.user_id && (
+                    {currentUser.$id === gift.user_id && !hasBeenPurchased && (
                         <button
                             type="button"
                             onClick={() => setOpenEditGiftModal(true)}
@@ -88,7 +88,7 @@ function Gift({ gift, currentUser, onGiftUpdated }) {
                     )}
             </li>
 
-            {openEditGiftModal && (
+            {openEditGiftModal && !hasBeenPurchased && (
                 <EditGift
                     gift={gift}
                     openEditGiftModal={openEditGiftModal}

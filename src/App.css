@@ -6,14 +6,13 @@
 }
 
 header {
-    
     img {
         position: relative;
         left: 50%;
         transform: translateX(-50%);
         max-width: 10%;
 
-        @media(max-width: 768px) {
+        @media (max-width: 768px) {
             max-width: 30%;
         }
     }
@@ -131,15 +130,14 @@ h2 {
     display: flex;
     flex-direction: column;
     margin: 0;
-    
-    
+
     .gift {
         padding: 1rem;
         color: #25113d;
         background-color: #bf9ee5;
         border-radius: 6px;
-        
-        >a {
+
+        > a {
             overflow-wrap: anywhere;
         }
 
@@ -148,7 +146,7 @@ h2 {
             justify-content: space-between;
             gap: 15px;
             align-items: center;
-            
+
             h2 {
                 margin: 0;
             }
@@ -166,18 +164,21 @@ h2 {
     height: 100vh;
 }
 dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    z-index: 1001;
+    max-height: 90vh;
+    overflow-y: auto;
     width: 90%;
     max-width: 30rem;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
     background-color: #433352;
     border-radius: 6px;
     border: none;
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
-    overflow: hidden;
     padding: 1.2em;
-    top: 7rem;
 
     label {
         display: block;
@@ -194,7 +195,7 @@ dialog {
         border: 1px solid #ab9ac0;
         background-color: #d0c2e1;
     }
-    input[type=checkbox] {
+    input[type="checkbox"] {
         width: auto;
     }
     .actions {
