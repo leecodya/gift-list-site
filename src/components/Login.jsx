@@ -5,6 +5,15 @@ function Login({ users, setCurrentUser }) {
     const [selectedUser, setSelectedUser] = useState(null);
     const [accessCode, setAccessCode] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleUserChange = (e) => {
+        const user = users.find((user) => user.$id === e.target.value);
+
+        setSelectedUser(user || null);
+        setAccessCode("");
+        setErrorMessage("");
+    };
 
     const handleSignIn = async (e) => {
         e.preventDefault();
@@ -15,6 +24,9 @@ function Login({ users, setCurrentUser }) {
         }
 
         try {
+            setIsSubmitting(true);
+            setErrorMessage("");
+
             const valid = await checkUserAccessCode(
                 selectedUser.$id,
                 accessCode
@@ -28,33 +40,52 @@ function Login({ users, setCurrentUser }) {
                 );
             }
         } catch (error) {
-            console.log(error);
+            console.error(error);
+            setErrorMessage(
+                "Something went wrong while signing in. Please try again."
+            );
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
     return (
-        <section className="login">
-            <div className="container">
-                <h2>Who are you?</h2>
-
-                <select>
-                    {users.map((user) => (
-                        <option key={user.$id} onClick={() => setSelectedUser(user)}>
-                            {user.name}
-                        </option>
-                    ))}
-                </select>
-
-                {selectedUser && (
-                    <p>
-                        Selected: <strong>{selectedUser.name}</strong>
+        <section className="flex items-center justify-center">
+            <div className="w-full max-w-md rounded-2xl border border-slate-700 bg-slate-900 p-6 shadow-2xl sm:p-8">
+                <form onSubmit={handleSignIn} className="space-y-5">
+                    <p className="mt-2 text-sm text-slate-400">
+                        Select your name and enter your access code.
                     </p>
-                )}
+                    <div>
+                        <label
+                            htmlFor="family-member"
+                            className="mb-2 block text-sm font-semibold text-slate-200"
+                        >
+                            Who are you?*
+                        </label>
 
-                <form onSubmit={handleSignIn}>
-                    <p className="mt-2">
-                        <label htmlFor="access-code">
-                            Access Code
+                        <select
+                            id="family-member"
+                            value={selectedUser?.$id || ""}
+                            onChange={handleUserChange}
+                            className="w-full rounded-lg border border-slate-600 bg-slate-800 px-4 py-3 text-white outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30"
+                        >
+                            <option value="">Select your name</option>
+
+                            {users.map((user) => (
+                                <option key={user.$id} value={user.$id}>
+                                    {user.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div>
+                        <label
+                            htmlFor="access-code"
+                            className="mb-2 block text-sm font-semibold text-slate-200"
+                        >
+                            Access Code*
                         </label>
 
                         <input
@@ -62,18 +93,37 @@ function Login({ users, setCurrentUser }) {
                             type="password"
                             id="access-code"
                             value={accessCode}
-                            onChange={(e) =>
-                                setAccessCode(e.target.value)
-                            }
+                            onChange={(e) => setAccessCode(e.target.value)}
+                            placeholder="Enter your access code"
+                            autoComplete="current-password"
+                            className="w-full rounded-lg border border-slate-600 bg-slate px-4 py-3 text-white placeholder:text-slate-500 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30"
                         />
-                    </p>
+                    </div>
 
-                    {errorMessage && (
-                        <p>{errorMessage}</p>
+                    {selectedUser && (
+                        <p className="text-sm text-slate-400">
+                            Signing in as{" "}
+                            <strong className="text-white">
+                                {selectedUser.name}
+                            </strong>
+                        </p>
                     )}
 
-                    <button className="mt-2.5" type="submit">
-                        Sign In
+                    {errorMessage && (
+                        <div
+                            role="alert"
+                            className="rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200"
+                        >
+                            {errorMessage}
+                        </div>
+                    )}
+
+                    <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="sign-in-btn w-full rounded-lg bg-[#912827] py-3 font-semibold text-white transition-all duration-200 hover:bg-[#FB7461] hover:cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                        {isSubmitting ? "Signing In..." : "Sign In"}
                     </button>
                 </form>
             </div>
