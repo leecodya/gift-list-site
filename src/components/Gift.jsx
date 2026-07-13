@@ -57,6 +57,10 @@ function Gift({ gift, currentUser, onGiftUpdated }) {
                     </>
                 )}
 
+                <span className="gift-priority font-bold italic">
+                    Priority: {gift.priority ?? 3}
+                </span>
+
                 {gift.purchased_by_user_id &&
                     currentUser.$id !== gift.user_id && (
                         <p>

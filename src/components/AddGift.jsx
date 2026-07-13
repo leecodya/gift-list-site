@@ -7,6 +7,7 @@ function AddGift({ selectedUserID, openAddGiftModal, setOpenAddGiftModal }) {
     const [giftPrice, setGiftPrice] = useState('');
     const [giftNotes, setGiftNotes] = useState('');
     const [addURL, setAddURL] = useState(false);
+    const [giftPriority, setGiftPriority] = useState(3);
     const [errorMessage, setErrorMessage] = useState('');
 
     function closeModal() {
@@ -24,7 +25,8 @@ function AddGift({ selectedUserID, openAddGiftModal, setOpenAddGiftModal }) {
                 giftName,
                 addURL ? giftURL : null,
                 Number(giftPrice),
-                giftNotes
+                giftNotes,
+                Number(giftPriority)
             );
 
             if (res.$id) {
@@ -68,6 +70,23 @@ function AddGift({ selectedUserID, openAddGiftModal, setOpenAddGiftModal }) {
                                     value={giftPrice}
                                     onChange={(e) => setGiftPrice(e.target.value)}
                                 />
+                            </p>
+
+                            <p className="mt-2">
+                                <label htmlFor="gift-priority">Priority</label>
+
+                                <select
+                                    id="gift-priority"
+                                    name="gift-priority"
+                                    value={giftPriority}
+                                    onChange={(e) => setGiftPriority(Number(e.target.value))}
+                                >
+                                    <option value={1}>1 - Highest</option>
+                                    <option value={2}>2 - High</option>
+                                    <option value={3}>3 - Normal</option>
+                                    <option value={4}>4 - Low</option>
+                                    <option value={5}>5 - Lowest</option>
+                                </select>
                             </p>
 
                             <p className="mt-2">

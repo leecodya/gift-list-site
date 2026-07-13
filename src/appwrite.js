@@ -10,7 +10,7 @@ const client = new Client().setEndpoint(ENDPOINT).setProject(PROJECT_ID);
 
 const database = new Databases(client);
 
-export const createGiftItem = async (userID, title, url, price, notes) => {
+export const createGiftItem = async (userID, title, url, price, notes, priority) => {
     try {
         const response = await database.createDocument(
             DATABASE_ID,
@@ -22,6 +22,7 @@ export const createGiftItem = async (userID, title, url, price, notes) => {
                 user_id: userID,
                 price,
                 notes,
+                priority
             },
         );
 

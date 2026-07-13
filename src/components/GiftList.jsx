@@ -19,16 +19,23 @@ function GiftList({ currentUser, selectedUser }) {
     };
 
     // Creates two lists and sorts each by created date
-    const sortByCreatedDate = (a, b) =>
-        new Date(a.$createdAt) - new Date(b.$createdAt);
+    const sortGifts = (a, b) => {
+        const priorityDifference = a.priority - b.priority;
+
+        if (priorityDifference !== 0) {
+            return priorityDifference;
+        }
+
+        return new Date(b.$createdAt) - new Date(a.$createdAt);
+    };
 
     const availableGifts = giftList
         .filter((gift) => !gift.has_been_purchased)
-        .sort(sortByCreatedDate);
+        .sort(sortGifts);
 
     const purchasedGifts = giftList
         .filter((gift) => gift.has_been_purchased)
-        .sort(sortByCreatedDate);
+        .sort(sortGifts);
 
     useEffect(() => {
         if (!selectedUser?.$id) return;

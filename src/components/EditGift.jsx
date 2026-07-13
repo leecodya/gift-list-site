@@ -12,6 +12,7 @@ function EditGift({
     const [giftPrice, setGiftPrice] = useState(gift.price);
     const [giftNotes, setGiftNotes] = useState(gift.notes || '');
     const [addURL, setAddURL] = useState(Boolean(gift.gift_url));
+    const [giftPriority, setGiftPriority] = useState(gift.priority ?? 3);
     const [errorMessage, setErrorMessage] = useState('');
 
     function closeModal() {
@@ -29,6 +30,7 @@ function EditGift({
                 gift_url: addURL ? giftURL : null,
                 price: Number(giftPrice),
                 notes: giftNotes,
+                priority: Number(giftPriority),
             };
 
             const response = await updateGiftItem(gift.$id, updatedGift);
@@ -75,6 +77,22 @@ function EditGift({
                                     value={giftPrice}
                                     onChange={(e) => setGiftPrice(e.target.value)}
                                 />
+                            </p>
+
+                            <p className="mt-2">
+                                <label htmlFor="edit-gift-priority">Priority</label>
+
+                                <select
+                                    id="edit-gift-priority"
+                                    value={giftPriority}
+                                    onChange={(e) => setGiftPriority(Number(e.target.value))}
+                                >
+                                    <option value={1}>1 — Highest</option>
+                                    <option value={2}>2 — High</option>
+                                    <option value={3}>3 — Normal</option>
+                                    <option value={4}>4 — Low</option>
+                                    <option value={5}>5 — Lowest</option>
+                                </select>
                             </p>
 
                             <p className="mt-2">
