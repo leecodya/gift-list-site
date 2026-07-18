@@ -39,7 +39,7 @@ function Gift({ gift, currentUser, onGiftUpdated }) {
                     )}
                 </div>
 
-                {gift.gift_url && (
+                {gift.gift_url && !gift.has_been_purchased && (
                     <a
                         href={gift.gift_url}
                         className="block mt-1"
