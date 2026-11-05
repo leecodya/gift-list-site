@@ -9,6 +9,12 @@ function GiftList({ currentUser, selectedUser }) {
     const [openAddGiftModal, setOpenAddGiftModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [giftList, setGiftList] = useState([]);
+    var isOwnList = '';
+
+    // Check if currentUser logged in is the selected user
+    if (selectedUser) {
+        isOwnList = currentUser.$id === selectedUser.$id;
+    }
 
     const handleGiftUpdated = (updatedGift) => {
         setGiftList((currentGifts) =>
@@ -28,6 +34,7 @@ function GiftList({ currentUser, selectedUser }) {
 
         return new Date(b.$createdAt) - new Date(a.$createdAt);
     };
+
 
     const availableGifts = giftList
         .filter((gift) => !gift.has_been_purchased)
@@ -73,49 +80,78 @@ function GiftList({ currentUser, selectedUser }) {
                             )}
                         </header>
 
-                        <section>
-                            <h3 className="text-xl mb-3.5 md:text-3xl font-bold">Available Gifts</h3>
-                            {isLoading ? (
-                                <Spinner />
-                            ) : availableGifts.length > 0 ? (
-                                <ul className="gift-list">
-                                    {availableGifts.map((gift) => (
-                                        <Gift
-                                            key={gift.$id}
-                                            gift={gift}
-                                            currentUser={currentUser}
-                                            onGiftUpdated={handleGiftUpdated}
-                                        />
-                                    ))}
-                                </ul>
-                            ) : (
-                                <p>No available gifts.</p>
-                            )}
-                        </section>
-                        <section>
-                            <h3 className="text-xl mb-3.5 mt-7 md:text-3xl font-bold">Purchased Gifts</h3>
-                            {isLoading ? (
-                                <Spinner />
-                            ) : purchasedGifts.length > 0 ? (
-                                <ul className="gift-list">
-                                    {purchasedGifts.map((gift) => (
-                                        <Gift
-                                            key={gift.$id}
-                                            gift={gift}
-                                            currentUser={currentUser}
-                                            onGiftUpdated={handleGiftUpdated}
-                                        />
-                                    ))}
-                                </ul>
-                            ) : (
-                                <p>No purchased gifts.</p>
-                            )}
-                        </section>
+                        {isOwnList ? (
+                            // Render all gifts together
+                            <section>
+                                <section>
+                                    {isLoading ? (
+                                        <Spinner />
+                                    ) : giftList.length > 0 ? (
+                                        <ul className="gift-list">
+                                            {giftList.map((gift) => (
+                                                <Gift
+                                                    key={gift.$id}
+                                                    gift={gift}
+                                                    currentUser={currentUser}
+                                                    onGiftUpdated={handleGiftUpdated}
+                                                    isOwnList={isOwnList}
+                                                />
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <p>No available gifts.</p>
+                                    )}
+                                </section>
+                            </section>
+                        ) : (
+                            // Render Available and Purchased sections
+                            <>
+                                <section>
+                                    <h3 className="text-xl mb-3.5 md:text-3xl font-bold">Available Gifts</h3>
+                                    {isLoading ? (
+                                        <Spinner />
+                                    ) : availableGifts.length > 0 ? (
+                                        <ul className="gift-list">
+                                            {availableGifts.map((gift) => (
+                                                <Gift
+                                                    key={gift.$id}
+                                                    gift={gift}
+                                                    currentUser={currentUser}
+                                                    onGiftUpdated={handleGiftUpdated}
+                                                />
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <p>No available gifts.</p>
+                                    )}
+                                </section>
+                                <section>
+                                    <h3 className="text-xl mb-3.5 mt-7 md:text-3xl font-bold">Purchased Gifts</h3>
+                                    {isLoading ? (
+                                        <Spinner />
+                                    ) : purchasedGifts.length > 0 ? (
+                                        <ul className="gift-list">
+                                            {purchasedGifts.map((gift) => (
+                                                <Gift
+                                                    key={gift.$id}
+                                                    gift={gift}
+                                                    currentUser={currentUser}
+                                                    onGiftUpdated={handleGiftUpdated}
+                                                />
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <p>No purchased gifts.</p>
+                                    )}
+                                </section>
+                            </>
+                        )}
                     </>
                 ) : (
                     <p className="no-selected-user">No user has been selected yet.</p>
-                )}
-            </section>
+                )
+                }
+            </section >
 
             {openAddGiftModal && (
                 <AddGift

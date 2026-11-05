@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { updatePurchasedGift } from '../appwrite';
 import EditGift from './EditGift';
 
-function Gift({ gift, currentUser, onGiftUpdated }) {
+function Gift({ gift, currentUser, onGiftUpdated, isOwnList }) {
     const [openEditGiftModal, setOpenEditGiftModal] = useState(false);
 
     const handlePurchase = async () => {
@@ -24,12 +24,12 @@ function Gift({ gift, currentUser, onGiftUpdated }) {
             <li className="gift">
                 <div className="title-area">
                     <h3 className="text-2xl md:text-3xl font-bold">
-                        {gift.has_been_purchased ? <s>{gift.title}</s> : gift.title}
+                        {gift.title}
                     </h3>
 
                     <span className="text-2xl">${gift.price}</span>
 
-                    {currentUser.$id === gift.user_id && !gift.has_been_purchased && (
+                    {currentUser.$id === gift.user_id && (
                         <button
                             type="button"
                             onClick={() => setOpenEditGiftModal(true)}
@@ -39,7 +39,7 @@ function Gift({ gift, currentUser, onGiftUpdated }) {
                     )}
                 </div>
 
-                {gift.gift_url && !gift.has_been_purchased && (
+                {gift.gift_url && (
                     <a
                         href={gift.gift_url}
                         className="block mt-1"
@@ -86,7 +86,7 @@ function Gift({ gift, currentUser, onGiftUpdated }) {
                     )}
             </li>
 
-            {openEditGiftModal && !gift.has_been_purchased && (
+            {openEditGiftModal && (
                 <EditGift
                     gift={gift}
                     openEditGiftModal={openEditGiftModal}
