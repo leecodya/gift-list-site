@@ -31,6 +31,7 @@ function EditGift({
                 price: Number(giftPrice),
                 notes: giftNotes,
                 priority: Number(giftPriority),
+                last_edited_at: new Date().toISOString(),
             };
 
             const response = await updateGiftItem(gift.$id, updatedGift);

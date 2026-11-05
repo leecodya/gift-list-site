@@ -19,9 +19,26 @@ function Gift({ gift, currentUser, onGiftUpdated, isOwnList }) {
         }
     };
 
+    const sevenDaysInMilliseconds = 7 * 24 * 60 * 60 * 1000;
+
+    const wasRecentlyEdited = gift.last_edited_at
+        ? Date.now() - new Date(gift.last_edited_at).getTime() < sevenDaysInMilliseconds
+        : false;
+
+    const daysSinceEdit = gift.last_edited_at
+        ? Math.floor(
+            (Date.now() - new Date(gift.last_edited_at).getTime()) /
+            (24 * 60 * 60 * 1000)
+        ) : null;
+
     return (
         <>
             <li className="gift">
+                {currentUser.$id !== gift.user_id && wasRecentlyEdited && (
+                    <span className="gift-updated inline-block rounded-full bg-blue-100 px-2 py-1 text-xs mb-2 font-medium text-blue-800">
+                        Updated within last 7 days
+                    </span>
+                )}
                 <div className="title-area">
                     <h3 className="text-2xl md:text-3xl font-bold">
                         {gift.title}
@@ -37,6 +54,7 @@ function Gift({ gift, currentUser, onGiftUpdated, isOwnList }) {
                             Edit
                         </button>
                     )}
+
                 </div>
 
                 {gift.gift_url && (
@@ -84,6 +102,16 @@ function Gift({ gift, currentUser, onGiftUpdated, isOwnList }) {
                             </button>
                         </div>
                     )}
+
+                {currentUser.$id !== gift.user_id && wasRecentlyEdited && (
+                    <p className="mt-1 text-xs text-gray-500">
+                        {daysSinceEdit === 0
+                            ? "Last edited today"
+                            : daysSinceEdit === 1
+                                ? "Last edited yesterday"
+                                : `Last edited ${daysSinceEdit} days ago`}
+                    </p>
+                )}
             </li>
 
             {openEditGiftModal && (
